@@ -1,0 +1,19 @@
+# This is a Declarative Automation Bundle definition for technical_assessment.
+# The Databricks extension requires databricks.yml configuration file.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: technical_assessment
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-33b3016f-3675.cloud.databricks.com
+
+  ## Optionally, there could be 'staging' or 'prod' targets here.
+  #
+  # prod:
+  #   workspace:
+  #     host: https://dbc-33b3016f-3675.cloud.databricks.com
