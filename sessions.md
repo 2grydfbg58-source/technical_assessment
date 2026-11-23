@@ -1,3 +1,5 @@
+## Session 1 - Creating the Constitution
+
 User: I have a data engineering technical assessment for a job. its description is in the requirements.md file. Read it through carefully and based on its content, create a mission.md, tech_stack.md and roadmap.md file in the specs subfolder. If anything is unclear, ask questions with your question-answering tool.
 
 Copilot: I’ll map the requirements into implementation scope and identify any decisions that need user input before writing the specs.
@@ -20,7 +22,6 @@ Find files matching `**/*`
 
 Ran terminal command: find . -maxdepth 3 -type f -not -path './.git/*' | sort
 
-The repository is a scaffold-only assessment, so the specs will make the missing analytical formulas and data contracts explicit while preserving the requirements as acceptance criteria.
 
 Ran terminal command: mkdir -p specs && git --no-pager status --short
 
@@ -30,6 +31,7 @@ Completed with input: {
   "requestedSchema": {
     "properties": {
       "revenue_basis": {
+The repository is a scaffold-only assessment, so the specs will make the missing analytical formulas and data contracts explicit while preserving the requirements as acceptance criteria.
         "type": "string",
         "title": "Revenue basis",
         "description": "Potential revenue should be compared gross or net.",
@@ -399,3 +401,5 @@ Search for `^## (Milestone|Stretch)|^\*\*Status:`
 Updated `roadmap.md` with status checkmarks for every milestone and stretch goal.
 
 Milestone 0 is marked completed.
+
+## Session 2 - Adding the First Feature
