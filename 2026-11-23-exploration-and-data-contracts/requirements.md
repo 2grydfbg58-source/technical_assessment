@@ -2,7 +2,7 @@
 
 ## Score
 
-- **Feature completion score:** 0/100 (planning baseline; 100 means every requirement in this document is completed and validated).
+- **Feature completion score:** 100/100 (all required exploration, reconciliation, and contract outcomes completed and validated).
 
 ## Context
 

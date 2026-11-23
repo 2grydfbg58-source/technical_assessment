@@ -19,7 +19,7 @@
 
 ## Milestone 1: Exploration and Data Contracts
 
-**Status: [ ] Not started**
+**Status: [x] Completed**
 
 ### Outcomes
 
