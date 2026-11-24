@@ -42,7 +42,7 @@ The 46,722 and 9,913 totals and the 8,095/7,722/353 Amsterdam counts reconcile e
 - CSV width is uniform at eight fields plus the header.
 - Nine supplied Airbnb zipcode values are nonconforming text examples include `....`, `b`, and address-like strings.
 - Bedrooms and review scores are optional enrichment fields. No revenue-eligible Airbnb row is rejected because of a missing bedroom or review score.
-- Coordinate-based recovery was measured with Shapely `polygon.contains(point)`. For missing or invalid values, 2,262 records had a unique containing PC4 polygon. No record produced multiple containing polygons, and no record was outside all postcode polygons. The remaining missing-or-invalid row is the supplied `0` postcode and stays unknown.
+- Coordinate-based recovery was measured with Shapely `polygon.contains(point)`. For missing or invalid values, 2,262 records had a unique containing PC4 polygon. No record produced multiple containing polygons, and no record was outside all postcode polygons. The supplied `0` postcode is invalid and is not assigned a recovered PC4; it remains unknown.
 
 ## Revenue input minimum
 
