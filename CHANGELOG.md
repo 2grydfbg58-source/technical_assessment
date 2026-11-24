@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a reusable feature-creation skill at `.github/skills/feature-creation/SKILL.md` for planning, implementing, validating, and tracking roadmap features.
 - Added executable pytest validation for source counts, Amsterdam coverage, optional-field gaps, postcode normalization and recovery, and revenue-contract examples.
 
 ## 2026-11-23

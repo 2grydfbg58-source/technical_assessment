@@ -1032,3 +1032,90 @@ I’ll add a reusable repository skill for maintaining change logs, then apply i
 Created a reusable changelog skill at SKILL.md and used it to add CHANGELOG.md.
 
 The changelog records the Exploration and Data Contracts feature on 2026-11-23 and its pytest validation checks on 2026-11-24. It clarifies that the milestone documented contracts but did not implement the full pipeline. Formatting checks passed. Unrelated existing worktree changes were left untouched.
+
+
+I’ll compare the constitution with the measured findings and contracts from this phase, then update only decisions or data facts that are missing or inconsistent.
+
+The constitution needs a few evidence-based clarifications: 20 Amsterdam Kamernet rows have unknown active status, Airbnb has exact duplicate rows and invalid postcodes, and missing Airbnb postcodes have a measured recovery outcome. I’m adding those facts and tightening the scope/deduplication caveats without changing the existing milestone plan.
+
+Updated the project constitution in mission.md with the measured active-status and postcode gaps, Airbnb duplicate-row and identifier limitations, coordinate-based recovery results, and a note that the source prices are historical snapshots—not current market estimates. I also clarified Amsterdam scoping and how unknown Kamernet statuses should be handled.
+
+The documentation diff passed git diff --check.
+
+Copilot Fusion (gpt-6-luna) • 0.7 credits
+Commit, switch to the main branch, and merge the replanning branch into it.
+
+13:58
+I’ll commit the constitution update on the replanning branch, then switch to main and merge that branch. I’ll verify the final branch and worktree state afterward.
+
+Committed the constitution update as 348a9da and fast-forward merged replanning/2026-11-24 into main. The worktree is clean; main is one commit ahead of origin/main. I did not push.
+
+## Session 4 - Automating Feature Creation
+
+User: Create a skill for automating feature creation.
+
+Copilot: Ran terminal command: git status --short && printf '\n--- root ---\n' && ls -la
+
+Read , lines 1 to 180
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/sessions.md",
+  "view_range": [
+    1,
+    180
+  ]
+}
+
+Search for `(?i)feature|skill|automate|workflow|speckit|specification|implementation`
+
+Ran terminal command: find . -maxdepth 4 -type f -not -path './.git/*' | sort && printf '\n--- README ---\n' && sed -n '1,200p' README.md && printf '\n--- .github ---\n' && find .github -maxdepth 4 -type f -print
+
+Read , lines 850 to 1051
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/sessions.md",
+  "view_range": [
+    850,
+    1051
+  ]
+}
+
+Read `SKILL.md`
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/.github/skills/changelog/SKILL.md"
+}
+
+Read 
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/specs/roadmap.md"
+}
+
+Read 
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/2026-11-23-exploration-and-data-contracts/plan.md"
+}
+
+Read 
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/2026-11-23-exploration-and-data-contracts/requirements.md"
+}
+
+Read 
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/2026-11-23-exploration-and-data-contracts/validation.md"
+}
+
+Ran terminal command: git status --short --branch && printf '\n--- recent commits ---\n' && git --no-pager log -5 --oneline --decorate
+
+I’m adding a repository skill that captures the existing milestone-to-feature workflow, including spec creation, implementation, validation, and roadmap completion, while preserving unrelated worktree changes.
+
+Edit `SKILL.md`
+
+Read `SKILL.md`
+Completed with input: {
+  "path": "/Users/martonklecsany/Documents/technical_assessment/.github/skills/feature-creation/SKILL.md"
+}
+
+Ran terminal command: git diff --check && git status --short && git --no-pager diff -- .github/skills/feature-creation/SKILL.md
+
+Created the feature-creation skill at `.github/skills/feature-creation/SKILL.md`. It covers milestone selection, feature planning, implementation, validation, and roadmap tracking.
+
+`git diff --check` passed. The pre-existing change to `sessions.md` was left untouched.
