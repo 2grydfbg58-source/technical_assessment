@@ -54,7 +54,13 @@ The first comparison uses gross potential revenue:
 - Airbnb coordinates are `latitude` and `longitude` and are complete in the supplied dataset.
 - For annual gross comparison, aggregate all valid Airbnb listings and active valid Kamernet listings independently by PC4 postcode.
 
-The source exports contain 46,722 Kamernet records and 9,913 Airbnb records. The supplied Kamernet data spans multiple Dutch cities; 8,095 records are for Amsterdam, of which 7,722 have `isRoomActive = "true"` and 353 are inactive. The Airbnb dataset has 2,254 missing postcodes, 14 missing bedroom values, and 1,711 missing review scores.
+The source exports contain 46,722 Kamernet records and 9,913 Airbnb rows. The supplied Kamernet data spans multiple Dutch cities; 8,095 records are for Amsterdam, of which 7,722 have `isRoomActive = "true"`, 353 have `"false"`, and 20 have an unknown/missing status. Only the 7,722 active records are current Kamernet revenue candidates; inactive and unknown-status rows remain auditable and do not enter current gold revenue.
+
+The Airbnb file has 2,254 blank/whitespace postcodes, 9 additional nonconforming nonblank postcode values, 14 missing bedroom values, and 1,711 missing review scores. Exact full-row comparison finds 382 duplicate rows. Airbnb has no source listing identifier among its eight columns, so a deterministic content hash is the available provisional listing key. Exact repeated rows must be flagged and handled deterministically, while retaining raw counts; identical source rows cannot be proven to represent the same real-world listing from this export alone.
+
+The observed Airbnb coordinate range is latitude 52.29031–52.42538071 and longitude 4.763264201–5.019667018. Coordinates are present on every row. Use the supplied postcode geography to establish Amsterdam scope and recover missing/invalid postcodes; do not infer scope from a bounding box alone. In the measured point-in-polygon run, 2,262 missing/invalid postcode rows had one containing PC4 polygon. A nonconforming value with no unambiguous recovery remains explicitly unknown.
+
+The Kamernet and Airbnb files are historical source snapshots, not current market observations. In particular, the Airbnb export has no listing capture timestamp. Reported annual gross revenue is a standardized annualization of snapshot prices, not a forecast or a time-aligned comparison. Do not describe these values as current without newer timestamped data.
 
 If an occupancy or availability field is present in the source data, it may be exposed as a configurable or derived metric. It must not silently change the default gross calculation. The MVP should therefore distinguish:
 
@@ -116,7 +122,9 @@ The MVP pipeline must validate:
 - Date and ingestion freshness.
 - Property and postcode aggregation row counts.
 - The property grain should be the source listing: Kamernet `_id` and Airbnb a source listing key or a stable row hash if no identifier exists.
-- Duplicate Airbnb listings should be identified by an exact or documented key before aggregation.
+- Duplicate Airbnb rows should be identified by exact row comparison or a documented key before aggregation; retain duplicate counts and avoid claiming that a content hash proves real-world identity.
+- Airbnb candidate scope must be established from geographic data rather than assumed from a coordinate bounding box. Keep records outside or ambiguously related to Amsterdam out of the Amsterdam comparison.
+- Preserve `isRoomActive` values other than `"true"` and `"false"` as unknown; do not coerce missing status to active or inactive.
 
 At least one quality framework, such as Spark expectations or an equivalent declarative check layer, must publish pass/fail counts and rejected-record reasons.
 
