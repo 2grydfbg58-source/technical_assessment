@@ -1,0 +1,25 @@
+resources:
+  jobs:
+    amsterdam_investment_pipeline:
+      name: amsterdam-investment-pipeline-${bundle.target}
+      job_clusters:
+        - job_cluster_key: pipeline_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: i3.xlarge
+            num_workers: 0
+      tasks:
+        - task_key: run_pipeline
+          job_cluster_key: pipeline_cluster
+          notebook_task:
+            notebook_path: ${workspace.file_path}/notebooks/run_pipeline
+            base_parameters:
+              root: ${workspace.file_path}
+              kamernet_source: ""
+              airbnb_source: ""
+              postcode_geojson: ""
+              amsterdam_geojson: ""
+              output_dir: ""
+              property_table: amsterdam_property_revenue
+              postcode_table: amsterdam_postcode_revenue
+              comparison_table: amsterdam_source_comparison

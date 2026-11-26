@@ -128,6 +128,38 @@ def test_conflicting_listing_key_is_rejected():
         build_gold_products(records, [])
 
 
+def test_source_pc4_ranks_use_competition_ranking_and_independent_totals():
+    kamernet = [
+        _silver_record("kamernet", "k-1018", Decimal("500"), "EUR_per_month", pc4="1018"),
+        _silver_record("kamernet", "k-1018-b", Decimal("500"), "EUR_per_month", pc4="1018"),
+        _silver_record("kamernet", "k-1019", Decimal("1000"), "EUR_per_month", pc4="1019"),
+        _silver_record("kamernet", "k-1020", Decimal("250"), "EUR_per_month", pc4="1020"),
+    ]
+    airbnb = [
+        _silver_record("airbnb", "a-1018", Decimal("100"), "EUR_per_night", pc4="1018", status=None),
+        _silver_record("airbnb", "a-1020", Decimal("100"), "EUR_per_night", pc4="1020", status=None),
+    ]
+
+    comparison = {
+        row["pc4"]: row
+        for row in build_gold_products(kamernet, airbnb)["source_comparison"]
+    }
+
+    assert comparison["1019"]["kamernet_pc4_rank"] == 1
+    assert comparison["1018"]["kamernet_pc4_rank"] == 1
+    assert comparison["1020"]["kamernet_pc4_rank"] == 3
+    assert comparison["1018"]["airbnb_pc4_rank"] == 1
+    assert comparison["1020"]["airbnb_pc4_rank"] == 1
+
+    no_airbnb = build_gold_products(
+        [_silver_record("kamernet", "k", Decimal("500"), "EUR_per_month", pc4="1018")],
+        [],
+    )["source_comparison"][0]
+    assert no_airbnb["airbnb_property_count"] == 0
+    assert no_airbnb["airbnb_annual_gross_revenue_eur"] == Decimal("0")
+    assert no_airbnb["airbnb_pc4_rank"] is None
+
+
 def test_parquet_exports_have_typed_schemas_and_round_trip(tmp_path):
     products = build_gold_products(
         [_silver_record("kamernet", "listing", Decimal("500.25"), "EUR_per_month")],
@@ -157,5 +189,9 @@ def test_parquet_exports_have_typed_schemas_and_round_trip(tmp_path):
     assert postcode_table.schema.field("property_count").type == pa.int64()
     comparison_table = pq.read_table(paths["source_comparison"])
     assert comparison_table.num_rows == 1
+    assert comparison_table.schema.field("kamernet_pc4_rank").type == pa.int64()
+    assert comparison_table.schema.field("airbnb_pc4_rank").type == pa.int64()
     comparison = comparison_table.to_pylist()[0]
     assert comparison["airbnb_minus_kamernet_revenue_eur"] == Decimal("37979.50")
+    assert comparison["kamernet_pc4_rank"] == 1
+    assert comparison["airbnb_pc4_rank"] == 1

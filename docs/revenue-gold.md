@@ -36,11 +36,17 @@ preserve the exact source decimal precision, with a minimum scale of two.
 | --- | --- | --- |
 | `property_revenue.parquet` | One row per `(source_name, source_listing_key)` | `source_name`, `source_listing_key`, nullable `pc4`, `annual_gross_revenue_eur`, `revenue_input_amount_eur`, `revenue_input_unit`, `currency_code`, `location_scope`, nullable `status`, `postcode_source`, `postcode_quality`, `quality_flags`, `duplicate_count` |
 | `postcode_revenue.parquet` | One row per `(source_name, pc4)` with known PC4 | `source_name`, `pc4`, `property_count`, `annual_gross_revenue_eur` |
-| `source_comparison.parquet` | One row per known PC4 present in either source | `pc4`, both source property counts and revenue totals, `airbnb_minus_kamernet_revenue_eur`, and `higher_revenue_source` (`airbnb`, `kamernet`, or `tie`) |
+| `source_comparison.parquet` | One row per known PC4 present in either source | `pc4`, both source property counts and revenue totals, `airbnb_minus_kamernet_revenue_eur`, `higher_revenue_source` (`airbnb`, `kamernet`, or `tie`), nullable `kamernet_pc4_rank`, and nullable `airbnb_pc4_rank` |
 
 An absent source at a postcode has a count and total of zero in the comparison.
 The revenue difference is Airbnb minus Kamernet. Source totals are compared
 within each PC4; no proximity matching or investment recommendation is implied.
+Each source rank is calculated independently over only the PC4 rows where that
+source has one or more eligible properties. Ranks are descending by that
+source's annual gross revenue. Equal totals receive the same standard
+competition rank, so values of `1, 1, 3` preserve the position gap after a tie.
+When a source has no eligible properties at a PC4, its rank is null even though
+the comparison row remains present for the other source.
 
 ## Reconciliation
 

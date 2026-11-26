@@ -133,6 +133,9 @@ def _build_postcode_products(
     for record in postcode_revenue:
         by_pc4[record["pc4"]][record["source_name"]] = record
 
+    kamernet_ranks = _competition_ranks(postcode_revenue, "kamernet")
+    airbnb_ranks = _competition_ranks(postcode_revenue, "airbnb")
+
     source_comparison = []
     for pc4, sources in sorted(by_pc4.items()):
         kamernet = sources.get("kamernet", {})
@@ -154,9 +157,38 @@ def _build_postcode_products(
                     if airbnb_total > kamernet_total
                     else "kamernet"
                 ),
+                "kamernet_pc4_rank": kamernet_ranks.get(pc4),
+                "airbnb_pc4_rank": airbnb_ranks.get(pc4),
             }
         )
     return postcode_revenue, source_comparison
+
+
+def _competition_ranks(
+    postcode_revenue: list[dict[str, Any]],
+    source_name: str,
+) -> dict[str, int]:
+    totals = sorted(
+        (
+            (
+                record["pc4"],
+                record["annual_gross_revenue_eur"],
+            )
+            for record in postcode_revenue
+            if record["source_name"] == source_name
+        ),
+        key=lambda item: (-item[1], item[0]),
+    )
+
+    ranks: dict[str, int] = {}
+    previous_total: Decimal | None = None
+    previous_rank = 0
+    for position, (pc4, total) in enumerate(totals, start=1):
+        if previous_total is None or total != previous_total:
+            previous_rank = position
+            previous_total = total
+        ranks[pc4] = previous_rank
+    return ranks
 
 
 def _build_reconciliation(
@@ -233,6 +265,8 @@ def write_gold_parquet(
             ("airbnb_annual_gross_revenue_eur", decimal_type),
             ("airbnb_minus_kamernet_revenue_eur", decimal_type),
             ("higher_revenue_source", pa.string()),
+            ("kamernet_pc4_rank", pa.int64()),
+            ("airbnb_pc4_rank", pa.int64()),
         ]),
     }
     paths: dict[str, Path] = {}
