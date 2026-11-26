@@ -89,8 +89,19 @@
 
 **Status: [ ] Not started**
 
+### Replan
+
+The mission and tech stack require postcode ranking metrics, but the completed
+revenue comparison currently reports source totals and the higher-revenue
+source without ranks. Add independent source rankings here rather than reopening
+Milestone 3, whose published exit criteria and validation are complete.
+
 ### Outcomes
 
+- Add separate Kamernet and Airbnb PC4 ranks to the source-comparison product,
+  ordered by annual gross revenue; do not combine the two source totals into one
+  rank. Equal totals share a standard competition rank, and a source with no
+  eligible properties at a PC4 has no rank.
 - Organize implementation into reusable notebooks and Python package modules.
 - Add job configuration under `resources`.
 - Parameterize source paths and table names.
@@ -99,6 +110,10 @@
 
 ### Exit Criteria
 
+- Each source's PC4 rank is descending by its annual gross revenue, tied totals
+  share a rank, and PC4s without eligible source properties are unranked.
+- Ranking fields, nullability, and tie behavior are documented and covered by
+  focused tests.
 - The pipeline runs end to end on Databricks Free Trial.
 - Configuration can be changed without editing transformation code.
 - Pipeline failures expose source and quality context.
