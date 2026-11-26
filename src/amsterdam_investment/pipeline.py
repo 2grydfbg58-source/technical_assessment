@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .gold import build_gold_products, write_gold_parquet
 from .ingestion import ingest_airbnb, ingest_kamernet
 from .silver import clean_airbnb, clean_kamernet
 
@@ -32,3 +33,18 @@ def run_bronze_silver(
             amsterdam_geojson,
         ),
     }
+
+
+def run_full_pipeline(
+    root: str | Path,
+    output_dir: str | Path | None = None,
+) -> dict[str, Any]:
+    root = Path(root)
+    products = run_bronze_silver(root)
+    gold = build_gold_products(
+        products["kamernet_silver"],
+        products["airbnb_silver"],
+    )
+    target_dir = Path(output_dir) if output_dir is not None else root / "data" / "output"
+    gold["output_paths"] = write_gold_parquet(gold, target_dir)
+    return {**products, **gold}

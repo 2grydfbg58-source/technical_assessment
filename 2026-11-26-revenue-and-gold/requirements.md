@@ -2,7 +2,7 @@
 
 ## Score
 
-- **Feature completion score:** 0/100 (planning only; implementation and validation have not started).
+- **Feature completion score:** 100/100 (implementation and acceptance criteria verified).
 
 ## Context
 
@@ -40,4 +40,4 @@ The goal is to calculate standardized annual gross revenue for Amsterdam Kamerne
 
 ## Completion
 
-Complete this feature only when revenue calculations are unit-tested, property and postcode keys are unique at their intended grains, Parquet outputs have documented schemas, and gold totals reconcile with the corresponding eligible silver inputs. Until then, leave the roadmap milestone incomplete and keep the score at 0/100.
+Revenue calculations are unit-tested, property and postcode keys are unique at their intended grains, Parquet outputs have documented schemas, and gold totals reconcile with the corresponding eligible silver inputs. The supplied-data pipeline completed and all Milestone 3 exit criteria are verified.

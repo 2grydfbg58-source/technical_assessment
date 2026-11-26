@@ -5,9 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "amsterdam-investment"
 version = "0.1.0"
-description = "Bronze and silver data transformations for Amsterdam rental revenue analysis"
+description = "Amsterdam rental revenue data pipeline and gold exports"
 requires-python = ">=3.9"
-dependencies = ["pandas", "shapely"]
+dependencies = ["pandas", "pyarrow", "shapely"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

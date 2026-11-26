@@ -65,7 +65,7 @@
 
 ## Milestone 3: Revenue and Gold
 
-**Status: [ ] Not started**
+**Status: [x] Completed**
 
 ### Outcomes
 

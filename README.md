@@ -20,5 +20,8 @@ products = run_bronze_silver(".")
 
 The pipeline preserves source payloads and ingestion metadata in bronze, emits typed
 silver records, and publishes quality and rejection counts through
-`amsterdam_investment.quality.quality_report`. It does not calculate gold revenue
-aggregations or produce Parquet exports; those are Milestone 3 outcomes.
+`amsterdam_investment.quality.quality_report`. Use
+`amsterdam_investment.pipeline.run_full_pipeline` to build annual gross revenue,
+reconcile postcode totals, and export the property, postcode, and source-comparison
+Parquet products under `data/output`. See [docs/revenue-gold.md](docs/revenue-gold.md)
+for eligibility rules, schemas, keys, and reconciliation details.

@@ -1,5 +1,6 @@
 import csv
 import json
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
@@ -132,12 +133,84 @@ def test_airbnb_duplicate_inference_and_quality(tmp_path):
     assert report["input_count"] == 2
 
 
-def test_full_source_pipeline_smoke():
+def test_full_source_pipeline_smoke(tmp_path):
     pytest.importorskip("amsterdam_investment")
-    from amsterdam_investment.pipeline import run_bronze_silver
+    from amsterdam_investment.pipeline import run_full_pipeline
 
-    result = run_bronze_silver(ROOT)
+    result = run_full_pipeline(ROOT, tmp_path / "output")
     assert len(result["kamernet_bronze"]) == 46_722
     assert len(result["airbnb_bronze"]) == 9_913
     assert len(result["kamernet_silver"]) == 46_722
     assert len(result["airbnb_silver"]) == 9_913
+    assert set(result["output_paths"]) == {
+        "property_revenue",
+        "postcode_revenue",
+        "source_comparison",
+    }
+    property_keys = [
+        (row["source_name"], row["source_listing_key"])
+        for row in result["property_revenue"]
+    ]
+    assert len(property_keys) == len(set(property_keys))
+    postcode_keys = [
+        (row["source_name"], row["pc4"])
+        for row in result["postcode_revenue"]
+    ]
+    assert len(postcode_keys) == len(set(postcode_keys))
+    comparison_postcodes = [
+        row["pc4"] for row in result["source_comparison"]
+    ]
+    assert len(comparison_postcodes) == len(set(comparison_postcodes))
+
+    postcode_products = {
+        (row["source_name"], row["pc4"]): row
+        for row in result["postcode_revenue"]
+    }
+    for comparison in result["source_comparison"]:
+        for source_name in ("kamernet", "airbnb"):
+            postcode = postcode_products.get((source_name, comparison["pc4"]), {})
+            prefix = f"{source_name}_"
+            assert comparison[f"{prefix}property_count"] == postcode.get(
+                "property_count", 0
+            )
+            assert comparison[f"{prefix}annual_gross_revenue_eur"] == postcode.get(
+                "annual_gross_revenue_eur", Decimal(0)
+            )
+
+    for source_name, reconciliation in result["reconciliation"].items():
+        assert (
+            reconciliation["property_revenue_total_eur"]
+            == reconciliation["known_pc4_revenue_total_eur"]
+            + reconciliation["unknown_pc4_revenue_total_eur"]
+        ), source_name
+        postcode_total = sum(
+            (
+                row["annual_gross_revenue_eur"]
+                for row in result["postcode_revenue"]
+                if row["source_name"] == source_name
+            ),
+            start=Decimal(0),
+        )
+        assert postcode_total == reconciliation["known_pc4_revenue_total_eur"]
+        assert (
+            reconciliation["property_count"]
+            + reconciliation["duplicate_source_rows_collapsed"]
+            == sum(
+                record["source_name"] == source_name
+                and bool(record.get("source_listing_key"))
+                and record.get("revenue_input_amount") is not None
+                and record.get("revenue_input_unit") == (
+                    "EUR_per_month"
+                    if source_name == "kamernet"
+                    else "EUR_per_night"
+                )
+                and record.get("location_scope") == "amsterdam"
+                and record.get("currency_code") == "EUR"
+                and record.get("revenue_input_amount") > 0
+                and (
+                    source_name != "kamernet"
+                    or record.get("status") == "true"
+                )
+                for record in result[f"{source_name}_silver"]
+            )
+        ), source_name
