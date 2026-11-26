@@ -11,9 +11,11 @@
 
 ## Validation evidence
 
-- `PYTHONPATH=src python3 -m pytest -q`: 21 passed.
-- Supplied-data `run_full_pipeline(".")` completed with 46,722 Kamernet and 9,913 Airbnb silver records.
-- Kamernet gold: 7,722 unique eligible properties, €90,137,064 total annual gross revenue, all with known PC4.
-- Airbnb gold: 9,224 unique eligible properties, 372 duplicate source rows collapsed, €699,598,420 total annual gross revenue, all with known PC4.
-- For each source, property revenue equaled known-PC4 plus unknown-PC4 revenue; postcode revenue equaled the known-PC4 property subset. Property, postcode, and comparison keys were unique and comparison measures matched their source-by-PC4 aggregates.
-- Parquet products were written and read back from `data/output`: 16,946 property rows, 151 postcode/source rows, and 81 comparison rows. Monetary fields use `decimal128(38, 2)` for the supplied data; schemas and grains are documented in `docs/revenue-gold.md`.
+- Validation branch: `feature/2026-11-26-revenue-and-gold-validation`, created from merged commit `0554a12`.
+- `PYTHONPATH=src python3 -m pytest -q`: **21 passed**.
+- A fresh `run_full_pipeline` supplied-data run completed in a temporary output directory with 46,722 Kamernet and 9,913 Airbnb silver records. It verified unique property, postcode/source, and comparison keys; source comparison values matched postcode aggregates; postcode totals matched the known-PC4 property subset; and each property total reconciled with the eligible silver rows after deduplication.
+- Kamernet: 7,722 eligible properties, 0 collapsed duplicate rows, €90,137,064 annual gross revenue, all with known PC4.
+- Airbnb: 9,596 eligible silver rows reduced to 9,224 properties, 372 duplicate rows collapsed, €699,598,420 annual gross revenue, all with known PC4.
+- Read the three committed Parquet files from `data/output` and compared them with the fresh pipeline exports; all schemas and table contents matched. They contain 16,946 property rows, 151 postcode/source rows, and 81 comparison rows. Supplied-data monetary fields are `decimal128(38, 2)`; schemas and grains are documented in `docs/revenue-gold.md`.
+- Focused fixtures also verified unknown-PC4 property retention and postcode exclusion, inactive/unknown Kamernet status exclusion, Airbnb duplicate counts, and both annualization formulas.
+- `git diff --check`: passed before recording this validation update. No checks failed, were blocked, or remain unrun.
