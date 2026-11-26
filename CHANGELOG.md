@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added a reusable feature-validation skill at `.github/skills/feature-validation/SKILL.md` for evidence-based checks against a feature's validation criteria.
 - Implemented reusable bronze and silver ingestion and cleaning for Kamernet and Airbnb.
 - Added deterministic source batch provenance, provisional Airbnb content keys,
   postal-code normalization/backfill, Amsterdam scope enrichment, quarantine
