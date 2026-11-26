@@ -10,3 +10,9 @@
 - [x] Amsterdam candidate scope is represented explicitly, and source records outside that scope are not silently lost.
 - [x] Focused unit tests cover source parsing, malformed-record handling, normalization, typing, deduplication, postcode recovery, unknown/quarantine behavior, and source preservation.
 - [x] The bronze/silver schemas and cleaning/backfill rules are documented, and all transformations required by Milestone 2 are covered by tests.
+
+## Validation evidence (2026-11-26)
+
+- `PYTHONPATH=src python3 -m pytest -q` — **17 passed**.
+- `run_bronze_silver(".")` completed against the supplied data. Bronze and silver contained 46,722 Kamernet records and 9,913 Airbnb records each; all 9,913 Airbnb postcode values were either normalized (7,651) or inferred (2,262).
+- Exercised `clean_airbnb` with overlapping postcode polygons and with coordinates outside all postcode polygons. Both cases retained `pc4=None`, emitted an explicit `ambiguous` or `out_of_bounds` quality, and included the `unknown_postcode` quality flag.
