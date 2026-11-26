@@ -40,7 +40,7 @@
 
 ## Milestone 2: Bronze and Silver
 
-**Status: [ ] Not started**
+**Status: [x] Completed**
 
 ### Outcomes
 

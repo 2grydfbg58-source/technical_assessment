@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-26
+
+### Added
+
+- Implemented reusable bronze and silver ingestion and cleaning for Kamernet and Airbnb.
+- Added deterministic source batch provenance, provisional Airbnb content keys,
+  postal-code normalization/backfill, Amsterdam scope enrichment, quarantine
+  metadata, and quality reporting.
+- Added focused bronze/silver unit tests and source-scale smoke validation.
+
 ## 2026-11-24
 
 ### Added
