@@ -2,11 +2,11 @@
 
 ## Score
 
-- **Feature completion score:** 0/100 (planning only; implementation and acceptance criteria are not yet verified).
+- **Feature completion score:** 0/100 (the required Databricks Free Trial run remains outstanding; keep the score at zero until all criteria have recorded evidence).
 
 ## Context
 
-This feature addresses **Milestone 4: Pipeline and Operations**, the earliest incomplete implementation milestone in `specs/roadmap.md`. Milestones 0–3 are complete. The existing portable package produces source-comparison totals but does not rank PC4s; reusable package modules exist, while notebook entry points and job configuration under `resources` are not yet present.
+This feature addresses **Milestone 4: Pipeline and Operations**, the earliest incomplete implementation milestone in `specs/roadmap.md`. Milestones 0–3 are complete. The implementation now adds independent PC4 ranks, reusable notebook orchestration, and a configurable Databricks job under `resources`. Local tests and bundle validation pass; the required Databricks Free Trial end-to-end run remains outstanding.
 
 The feature adds independent source rankings and completes the pipeline organization, configurable Databricks job, and operational documentation required by the milestone.
 
@@ -41,4 +41,4 @@ The feature adds independent source rankings and completes the pipeline organiza
 
 ## Completion
 
-This feature is planned but not implemented. Keep the score at 0/100 until requirements are verified with recorded evidence. Keep the Milestone 4 roadmap status incomplete until every milestone exit criterion, including the Databricks Free Trial run, has passed.
+This feature is implemented but not fully validated. Keep the score at 0/100 until requirements are verified with recorded evidence. Keep the Milestone 4 roadmap status incomplete until every milestone exit criterion, including the Databricks Free Trial run, has passed.

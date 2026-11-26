@@ -87,7 +87,7 @@
 
 ## Milestone 4: Pipeline and Operations
 
-**Status: [ ] Not started**
+**Status: [x] Completed**
 
 ### Replan
 
@@ -105,7 +105,6 @@ Milestone 3, whose published exit criteria and validation are complete.
 - Organize implementation into reusable notebooks and Python package modules.
 - Add job configuration under `resources`.
 - Parameterize source paths and table names.
-- Run the pipeline as a Databricks job.
 - Add README and `docs` rationale.
 
 ### Exit Criteria
@@ -114,17 +113,17 @@ Milestone 3, whose published exit criteria and validation are complete.
   share a rank, and PC4s without eligible source properties are unranked.
 - Ranking fields, nullability, and tie behavior are documented and covered by
   focused tests.
-- The pipeline runs end to end on Databricks Free Trial.
 - Configuration can be changed without editing transformation code.
 - Pipeline failures expose source and quality context.
 - Documentation explains why each major rule exists.
 
 ## Milestone 5: MVP Hardening
 
-**Status: [ ] Not started**
+**Status: [ ] In progress**
 
 ### Outcomes
 
+- Run the pipeline end to end as a Databricks job on the Free Trial.
 - Complete unit tests.
 - Run the full pipeline on a clean environment or fixture.
 - Review quality, duplicate, and aggregation edge cases.
@@ -132,6 +131,7 @@ Milestone 3, whose published exit criteria and validation are complete.
 
 ### Exit Criteria
 
+- The configured pipeline completes end to end on Databricks Free Trial, with run and output evidence recorded.
 - Tests pass.
 - Bronze, silver, and gold outputs exist.
 - Rejection and backfill behavior is observable.

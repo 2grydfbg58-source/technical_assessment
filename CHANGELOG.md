@@ -5,11 +5,18 @@
 ### Added
 
 - Added a reusable feature-validation skill at `.github/skills/feature-validation/SKILL.md` for evidence-based checks against a feature's validation criteria.
+- Implemented the revenue and gold pipeline, producing property, postcode, and source-comparison Parquet outputs with documented eligibility rules, reconciliation, and focused tests.
+- Added independent Kamernet and Airbnb PC4 competition ranks, including tie gaps and null ranks when a source has no eligible properties at a PC4.
+- Added a reusable Databricks notebook and configurable job resources for source/geography paths, output locations, and table names.
 - Implemented reusable bronze and silver ingestion and cleaning for Kamernet and Airbnb.
 - Added deterministic source batch provenance, provisional Airbnb content keys,
   postal-code normalization/backfill, Amsterdam scope enrichment, quarantine
   metadata, and quality reporting.
 - Added focused bronze/silver unit tests and source-scale smoke validation.
+
+### Changed
+
+- Recorded Pipeline and Operations validation: 5 focused tests and all 22 repository tests pass, the supplied-data local pipeline produces 81 source-comparison rows, and Databricks bundle validation succeeds. Milestone 4 remains in progress because the Databricks Free Trial run is outstanding; no remote deployment or job run was performed.
 
 ## 2026-11-24
 

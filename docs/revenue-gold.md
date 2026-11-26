@@ -36,7 +36,7 @@ preserve the exact source decimal precision, with a minimum scale of two.
 | --- | --- | --- |
 | `property_revenue.parquet` | One row per `(source_name, source_listing_key)` | `source_name`, `source_listing_key`, nullable `pc4`, `annual_gross_revenue_eur`, `revenue_input_amount_eur`, `revenue_input_unit`, `currency_code`, `location_scope`, nullable `status`, `postcode_source`, `postcode_quality`, `quality_flags`, `duplicate_count` |
 | `postcode_revenue.parquet` | One row per `(source_name, pc4)` with known PC4 | `source_name`, `pc4`, `property_count`, `annual_gross_revenue_eur` |
-| `source_comparison.parquet` | One row per known PC4 present in either source | `pc4`, both source property counts and revenue totals, `airbnb_minus_kamernet_revenue_eur`, `higher_revenue_source` (`airbnb`, `kamernet`, or `tie`), nullable `kamernet_pc4_rank`, and nullable `airbnb_pc4_rank` |
+| `source_comparison.parquet` | One row per known PC4 present in either source | `pc4`, both source property counts and revenue totals, `airbnb_minus_kamernet_revenue_eur`, `higher_revenue_source` (`airbnb`, `kamernet`, or `tie`), `kamernet_pc4_rank` (nullable `int64`), and `airbnb_pc4_rank` (nullable `int64`) |
 
 An absent source at a postcode has a count and total of zero in the comparison.
 The revenue difference is Airbnb minus Kamernet. Source totals are compared

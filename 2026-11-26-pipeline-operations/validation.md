@@ -1,6 +1,6 @@
 # Validation: Pipeline and Operations
 
-- [ ] Source-comparison output includes separately named Kamernet and Airbnb PC4 rank fields with documented nullable types.
+- [x] Source-comparison output includes separately named Kamernet and Airbnb PC4 rank fields with documented nullable types.
 - [x] Each source's PC4s are ranked by that source's annual gross revenue in descending order; source ranks do not affect one another.
 - [x] Equal totals share a standard competition rank and subsequent ranks contain the appropriate gaps.
 - [x] A PC4 without eligible properties for one source has a null rank for that source while its comparison count and revenue remain zero.
@@ -14,10 +14,11 @@
 
 ## Validation record (2026-11-26)
 
+- **Passed:** The source-comparison documentation specifies both rank columns as nullable `int64`; a local Parquet schema inspection confirmed those types and nullability.
 - **Passed:** `PYTHONPATH=src python3 -m pytest tests/test_revenue_gold.py` — 5 passed.
 - **Passed:** `PYTHONPATH=src python3 -m pytest` — 22 passed.
 - **Passed:** Ran `run_full_pipeline` on the supplied data with a temporary output directory; inspected all three Parquet products and confirmed 81 source-comparison rows and nullable `int64` rank columns.
-- **Passed by code/configuration inspection:** source-specific competition ranking, notebook delegation to the package, configurable paths/table names in the bundle job, and source/quality context in `PipelineError`.
-- **Incomplete:** The output schema has nullable `int64` rank fields, and the docs call the ranks nullable, but the docs do not explicitly state the `int64` field type.
-- **Blocked:** Databricks end-to-end run and bundle validation were not run because the Databricks CLI is not installed in this environment. No deployment or remote job was attempted.
+- **Passed:** `/Users/martonklecsany/.local/bin/databricks bundle validate --skills-invoked databricks-core,databricks-jobs,databricks-serverless --profile technical_assessment` — `Validation OK!`
+- **Passed by code/configuration inspection:** source-specific competition ranking, notebook delegation to the package, configurable paths/table names in the bundle job, and source/quality context in `PipelineError`. The bundle uses a valid single-node cluster configuration.
+- **Blocked:** The Databricks Free Trial end-to-end run was not performed because deployment and remote execution were not approved. No remote resources were deployed or run.
 - The feature completion score remains **0/100** as defined in `requirements.md`; the required Databricks evidence is still outstanding.
