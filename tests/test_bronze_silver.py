@@ -4,6 +4,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import pytest
+import pyarrow.parquet as pq
 from shapely.geometry import Point, Polygon
 
 from amsterdam_investment.cleaning import (
@@ -146,7 +147,31 @@ def test_full_source_pipeline_smoke(tmp_path):
         "property_revenue",
         "postcode_revenue",
         "source_comparison",
+        "kamernet_bronze",
+        "airbnb_bronze",
+        "kamernet_silver",
+        "airbnb_silver",
+        "pipeline_quality",
+        "quality_rejection_evidence",
+        "run_manifest",
     }
+    manifest_path = tmp_path / "output" / "run_manifest.json"
+    assert manifest_path.is_file()
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["source_counts"]["kamernet_bronze"] == 46_722
+    assert manifest["source_counts"]["airbnb_bronze"] == 9_913
+    assert set(manifest["quality"]) == {"kamernet", "airbnb"}
+    assert manifest["started_at"]
+    assert manifest["finished_at"]
+    assert "kamernet_bronze" in manifest["output_paths"]
+    assert "quality_rejection_evidence" in manifest["output_paths"]
+    assert pq.read_table(tmp_path / "output" / "kamernet_bronze.parquet").num_rows == 46_722
+    assert pq.read_table(tmp_path / "output" / "airbnb_silver.parquet").num_rows == 9_913
+    quality_table = pq.read_table(tmp_path / "output" / "pipeline_quality.parquet")
+    assert quality_table.num_rows == 2
+    assert pq.read_table(
+        tmp_path / "output" / "quality_rejection_evidence.parquet"
+    ).num_rows >= 1
     property_keys = [
         (row["source_name"], row["source_listing_key"])
         for row in result["property_revenue"]
