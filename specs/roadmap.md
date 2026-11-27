@@ -119,7 +119,7 @@ Milestone 3, whose published exit criteria and validation are complete.
 
 ## Milestone 5: MVP Hardening
 
-**Status: [ ] In progress**
+**Status: [x] Completed**
 
 ### Outcomes
 

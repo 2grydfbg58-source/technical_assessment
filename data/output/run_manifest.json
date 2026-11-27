@@ -1,0 +1,63 @@
+{
+  "finished_at": "2026-11-27T09:31:56.507513+00:00",
+  "output_paths": {
+    "airbnb_bronze": "/Users/martonklecsany/Documents/technical_assessment/data/output/airbnb_bronze.parquet",
+    "airbnb_silver": "/Users/martonklecsany/Documents/technical_assessment/data/output/airbnb_silver.parquet",
+    "kamernet_bronze": "/Users/martonklecsany/Documents/technical_assessment/data/output/kamernet_bronze.parquet",
+    "kamernet_silver": "/Users/martonklecsany/Documents/technical_assessment/data/output/kamernet_silver.parquet",
+    "pipeline_quality": "/Users/martonklecsany/Documents/technical_assessment/data/output/pipeline_quality.parquet",
+    "postcode_revenue": "/Users/martonklecsany/Documents/technical_assessment/data/output/postcode_revenue.parquet",
+    "property_revenue": "/Users/martonklecsany/Documents/technical_assessment/data/output/property_revenue.parquet",
+    "quality_rejection_evidence": "/Users/martonklecsany/Documents/technical_assessment/data/output/quality_rejection_evidence.parquet",
+    "source_comparison": "/Users/martonklecsany/Documents/technical_assessment/data/output/source_comparison.parquet"
+  },
+  "quality": {
+    "airbnb": {
+      "input_count": 9913,
+      "quality_flag_counts": {
+        "duplicate": 764,
+        "duplicate_count=2": 764,
+        "inferred_postcode": 2262,
+        "location_non_amsterdam": 317
+      },
+      "rejected_count": 0,
+      "rejection_counts": {}
+    },
+    "kamernet": {
+      "input_count": 46722,
+      "quality_flag_counts": {
+        "unknown_status": 100
+      },
+      "rejected_count": 0,
+      "rejection_counts": {}
+    }
+  },
+  "reconciliation": {
+    "airbnb": {
+      "duplicate_source_rows_collapsed": 372,
+      "known_pc4_property_count": 9224,
+      "known_pc4_revenue_total_eur": "699598420",
+      "property_count": 9224,
+      "property_revenue_total_eur": "699598420",
+      "unknown_pc4_property_count": 0,
+      "unknown_pc4_revenue_total_eur": "0"
+    },
+    "kamernet": {
+      "duplicate_source_rows_collapsed": 0,
+      "known_pc4_property_count": 7722,
+      "known_pc4_revenue_total_eur": "90137064",
+      "property_count": 7722,
+      "property_revenue_total_eur": "90137064",
+      "unknown_pc4_property_count": 0,
+      "unknown_pc4_revenue_total_eur": "0"
+    }
+  },
+  "run_id": null,
+  "source_counts": {
+    "airbnb_bronze": 9913,
+    "airbnb_silver": 9913,
+    "kamernet_bronze": 46722,
+    "kamernet_silver": 46722
+  },
+  "started_at": "2026-11-27T09:31:55.158391+00:00"
+}

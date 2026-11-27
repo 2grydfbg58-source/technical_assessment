@@ -2,7 +2,7 @@
 
 ## Score
 
-- **Feature completion score:** 0/100 (planning only; no implementation or validation evidence has been produced for this feature).
+- **Feature completion score:** 100/100 (all Milestone 5 validation criteria were verified on 2026-11-27; see [validation.md](./validation.md)).
 
 ## Context
 
@@ -37,4 +37,4 @@ This feature addresses **Milestone 5: MVP Hardening**, the earliest incomplete i
 
 ## Completion
 
-This feature is complete only when every Milestone 5 exit criterion has verified evidence. Keep the roadmap milestone incomplete and the score at 0/100 until that evidence is recorded. Planning artifacts alone do not count as implementation or validation.
+This feature is complete only when every Milestone 5 exit criterion has verified evidence. All criteria are recorded in [validation.md](./validation.md); the roadmap milestone is complete.

@@ -19,6 +19,7 @@ where = ["src"]
 [dependency-groups]
 dev = [
     "databricks-connect~=18.2.0",
+    "pytest~=8.3.5",
 ]
 
 [tool.databricks.environment]

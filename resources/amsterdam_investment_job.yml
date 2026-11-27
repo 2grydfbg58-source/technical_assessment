@@ -2,20 +2,18 @@ resources:
   jobs:
     amsterdam_investment_pipeline:
       name: amsterdam-investment-pipeline-${bundle.target}
-      job_clusters:
-        - job_cluster_key: pipeline_cluster
-          new_cluster:
-            spark_version: 15.4.x-scala2.12
-            node_type_id: i3.xlarge
-            num_workers: 0
-            spark_conf:
-              spark.databricks.cluster.profile: singleNode
-              spark.master: local[*]
-            custom_tags:
-              ResourceClass: SingleNode
+      performance_target: STANDARD
+      environments:
+        - environment_key: pipeline
+          spec:
+            environment_version: "5"
+            dependencies:
+              - pandas==2.2.3
+              - pyarrow==21.0.0
+              - shapely==2.2.0
       tasks:
         - task_key: run_pipeline
-          job_cluster_key: pipeline_cluster
+          environment_key: pipeline
           notebook_task:
             notebook_path: ${workspace.file_path}/notebooks/run_pipeline
             base_parameters:

@@ -3,11 +3,11 @@ Repository for the RevoData Technical Assessment
 
 ## Bronze and silver pipeline
 
-Install the package and dependencies in a local Python environment:
+Install the package and development/test dependencies from the lockfile:
 
 ```bash
-python -m pip install -e .
-pytest
+uv sync --group dev
+uv run pytest
 ```
 
 Run the bronze/silver transformation through the portable package:
@@ -48,7 +48,8 @@ run_full_pipeline("/mnt/project", config=config)
 ```
 
 The Databricks bundle job uses `notebooks/run_pipeline.py` and resources under
-`resources/`. Deploy and run it with:
+`resources/`. It runs on serverless STANDARD compute with a pinned Python
+environment for pandas, PyArrow, and Shapely. Deploy and run it with:
 
 ```bash
 databricks bundle validate

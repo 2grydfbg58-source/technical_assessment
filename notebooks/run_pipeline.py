@@ -119,6 +119,48 @@ def flatten_silver(records):
     } for record in records]
 
 
+from pyspark.sql.types import DoubleType, LongType, StringType, StructField, StructType
+
+bronze_schema = StructType([
+    StructField("source_name", StringType()),
+    StructField("source_record_id", StringType()),
+    StructField("source_payload", StringType()),
+    StructField("source_path", StringType()),
+    StructField("source_row_number", LongType()),
+    StructField("ingestion_timestamp", StringType()),
+    StructField("ingestion_batch_id", StringType()),
+    StructField("parse_status", StringType()),
+    StructField("parse_error", StringType()),
+])
+silver_schema = StructType([
+    StructField("source_name", StringType()),
+    StructField("source_listing_key", StringType()),
+    StructField("source_payload", StringType()),
+    StructField("source_path", StringType()),
+    StructField("source_row_number", LongType()),
+    StructField("city", StringType()),
+    StructField("latitude", DoubleType()),
+    StructField("longitude", DoubleType()),
+    StructField("postcode_full", StringType()),
+    StructField("pc4", StringType()),
+    StructField("postcode_source", StringType()),
+    StructField("postcode_quality", StringType()),
+    StructField("location_scope", StringType()),
+    StructField("status", StringType()),
+    StructField("currency_code", StringType()),
+    StructField("revenue_input_amount", StringType()),
+    StructField("revenue_input_unit", StringType()),
+    StructField("bedrooms", StringType()),
+    StructField("review_score", StringType()),
+    StructField("quality_flags", StringType()),
+    StructField("rejection_reason", StringType()),
+    StructField("duplicate_count", LongType()),
+    StructField("ingestion_timestamp", StringType()),
+    StructField("ingestion_batch_id", StringType()),
+    StructField("original", StringType()),
+])
+
+
 medallion_products = (
     ("kamernet_bronze", "kamernet_bronze_table", "kamernet_bronze"),
     ("airbnb_bronze", "airbnb_bronze_table", "airbnb_bronze"),
@@ -126,8 +168,14 @@ medallion_products = (
     ("airbnb_silver", "airbnb_silver_table", "airbnb_silver"),
 )
 for source_name, table_config_name, result_name in medallion_products:
-    records = flatten_bronze(result[result_name]) if source_name.endswith("bronze") else flatten_silver(result[result_name])
-    spark.createDataFrame(records).write.format("delta").mode(
+    is_bronze = source_name.endswith("bronze")
+    records = (
+        flatten_bronze(result[result_name])
+        if is_bronze
+        else flatten_silver(result[result_name])
+    )
+    schema = bronze_schema if is_bronze else silver_schema
+    spark.createDataFrame(records, schema=schema).write.format("delta").mode(
         "overwrite"
     ).saveAsTable(getattr(config, table_config_name))
 

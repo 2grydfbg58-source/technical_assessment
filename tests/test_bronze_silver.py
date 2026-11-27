@@ -134,6 +134,88 @@ def test_airbnb_duplicate_inference_and_quality(tmp_path):
     assert report["input_count"] == 2
 
 
+def test_rejections_and_backfills_are_exported_as_quality_evidence(tmp_path):
+    from amsterdam_investment.pipeline import PipelineConfig, run_full_pipeline
+
+    kamernet_source = tmp_path / "rentals.json"
+    kamernet_source.write_text(json.dumps([
+        {
+            "_id": ["kamernet-1"],
+            "rent": "€ 500,-",
+            "city": "Amsterdam",
+            "postalCode": "1018AS",
+            "isRoomActive": "true",
+            "latitude": "52.3",
+            "longitude": "4.9",
+        }
+    ]), encoding="utf-8")
+
+    airbnb_source = tmp_path / "airbnb.csv"
+    fields = ["zipcode", "price", "latitude", "longitude", "bedrooms", "review_scores_value"]
+    with airbnb_source.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows([
+            {
+                "zipcode": "",
+                "price": "130",
+                "latitude": "52.378",
+                "longitude": "4.874",
+                "bedrooms": "1",
+                "review_scores_value": "4.8",
+            },
+            {
+                "zipcode": "",
+                "price": "invalid",
+                "latitude": "52.379",
+                "longitude": "4.875",
+                "bedrooms": "1",
+                "review_scores_value": "4.8",
+            },
+        ])
+
+    polygon = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "properties": {"pc4_code": "1053"},
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    [4.8, 52.3], [5.0, 52.3], [5.0, 52.5],
+                    [4.8, 52.5], [4.8, 52.3],
+                ]],
+            },
+        }],
+    }
+    postcode_geojson = tmp_path / "postcodes.geojson"
+    postcode_geojson.write_text(json.dumps(polygon), encoding="utf-8")
+    amsterdam_geojson = tmp_path / "amsterdam.geojson"
+    amsterdam_geojson.write_text(json.dumps(polygon), encoding="utf-8")
+
+    config = PipelineConfig.for_root(
+        ROOT,
+        kamernet_source=str(kamernet_source),
+        airbnb_source=str(airbnb_source),
+        postcode_geojson=str(postcode_geojson),
+        amsterdam_geojson=str(amsterdam_geojson),
+        output_dir=str(tmp_path / "output"),
+    )
+    result = run_full_pipeline(ROOT, config=config)
+    evidence = pq.read_table(
+        result["output_paths"]["quality_rejection_evidence"]
+    ).to_pylist()
+
+    assert {
+        (row["record_kind"], row["rejection_reason"])
+        for row in evidence
+    } == {
+        ("backfilled", None),
+        ("rejected", "invalid_price_format"),
+    }
+    assert result["quality"]["airbnb"]["rejected_count"] == 1
+
+
 def test_full_source_pipeline_smoke(tmp_path):
     pytest.importorskip("amsterdam_investment")
     from amsterdam_investment.pipeline import run_full_pipeline
