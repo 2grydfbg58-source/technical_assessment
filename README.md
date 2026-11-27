@@ -23,7 +23,9 @@ silver records, and publishes quality and rejection counts through
 `amsterdam_investment.quality.quality_report`. Use
 `amsterdam_investment.pipeline.run_full_pipeline` to build annual gross revenue,
 reconcile postcode totals, and export the property, postcode, and source-comparison
-Parquet products under `data/output`. See [docs/revenue-gold.md](docs/revenue-gold.md)
+Parquet products under `data/output`. Each full run also writes `run_manifest.json`
+with source counts, quality/rejection counts, reconciliation totals, and output paths.
+See [docs/revenue-gold.md](docs/revenue-gold.md)
 for eligibility rules, schemas, keys, and reconciliation details.
 
 ## Pipeline configuration and Databricks
@@ -55,5 +57,20 @@ databricks bundle run amsterdam_investment_pipeline --target dev
 ```
 
 Job parameters expose the source, geography, output, and table-name settings.
+The job publishes four medallion Delta tables and a pipeline-quality Delta table
+in addition to the three gold tables:
+`amsterdam_kamernet_bronze`, `amsterdam_airbnb_bronze`,
+`amsterdam_kamernet_silver`, `amsterdam_airbnb_silver`, and
+`amsterdam_pipeline_quality`. Bronze, silver, and quality table names are configurable
+like the gold table names.
+The notebook prints source counts, quality and rejection counts, reconciliation,
+backfill and unknown-postcode evidence, and every exported product path.
+The local pipeline writes the same quality and reconciliation evidence to
+`run_manifest.json` under the configured output directory.
+Local full runs also export `kamernet_bronze.parquet`,
+`airbnb_bronze.parquet`, `kamernet_silver.parquet`, `airbnb_silver.parquet`,
+`pipeline_quality.parquet`, and `quality_rejection_evidence.parquet`.
+The manifest includes run timestamps and the Databricks job run identifier when
+the notebook is executed by a configured job.
 Failures raised by the package include the pipeline stage and source paths;
 gold-stage failures also include Kamernet and Airbnb quality counts.

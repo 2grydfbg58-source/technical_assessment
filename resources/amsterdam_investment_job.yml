@@ -28,3 +28,8 @@ resources:
               property_table: amsterdam_property_revenue
               postcode_table: amsterdam_postcode_revenue
               comparison_table: amsterdam_source_comparison
+              kamernet_bronze_table: amsterdam_kamernet_bronze
+              airbnb_bronze_table: amsterdam_airbnb_bronze
+              kamernet_silver_table: amsterdam_kamernet_silver
+              airbnb_silver_table: amsterdam_airbnb_silver
+              quality_table: amsterdam_pipeline_quality
